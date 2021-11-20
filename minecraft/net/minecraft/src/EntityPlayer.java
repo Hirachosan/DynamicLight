@@ -1,6 +1,9 @@
 package net.minecraft.src;
 
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Collection;
@@ -409,6 +412,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
     	return false;
     }
     
+
     /**
      * Return the amount of time this entity should stay in a portal before being transported.
      */
@@ -2215,16 +2219,50 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
 
     public boolean canPlayerEdit(int par1, int par2, int par3, int par4, ItemStack par5ItemStack)
     {
-    	// FCMOD: Code added to prevent the player from placing blocks while in mid air
-    	if ( !capabilities.isCreativeMode && !onGround && !inWater && !isOnLadder() && ridingEntity == null && !handleLavaMovement() )
-    	{
-    		return false;
-    	}
-    	// END FCMOD
-    	
+        // FCMOD: Code added to prevent the player from placing blocks while in mid air
+        boolean disableHardcoreBouncing = false;
+
+        try {
+            Class decoManagerClass;
+
+            if (FCUtilsReflection.isObfuscated()) {
+                decoManagerClass = Class.forName("net.minecraft.src.DecoManager");
+            }
+            else {
+                decoManagerClass = Class.forName("DecoManager");
+            }
+
+            Method decoInstanceGetter = decoManagerClass.getDeclaredMethod("getInstance");
+            FCAddOn decoInstance = (FCAddOn) decoInstanceGetter.invoke(null);
+
+            Field disableHarcoreBouncingField = decoManagerClass.getDeclaredField("disableHardcoreBouncing");
+            disableHardcoreBouncing = (Boolean) disableHarcoreBouncingField.get(decoInstance);
+        } catch (ClassNotFoundException e) {
+
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        
+        if (disableHardcoreBouncing) {
+            if (!capabilities.isCreativeMode && !onGround && !inWater && !isOnLadder() && ridingEntity == null && !handleLavaMovement())
+            {
+                return false;
+            }
+        }
+        // END FCMOD
+
         return this.capabilities.allowEdit ? true : (par5ItemStack != null ? par5ItemStack.func_82835_x() : false);
     }
-
     /**
      * Get the experience points the entity currently has.
      */
