@@ -26,7 +26,7 @@ public class DLMain extends FCAddOn{
 	 */
 
 	public DLMain() {
-		super("Hiracho's Dynamic Lighting", "1.0", "DL");
+		super("Hiracho's Dynamic Lighting", "1.1.0", "DL");
 	}
 	
 	public String GetLanguageFilePrefix()

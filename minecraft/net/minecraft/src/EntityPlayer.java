@@ -394,7 +394,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
                     		MathHelper.floor_double(boundingBox.maxY), MathHelper.floor_double( posZ));
                     if (worldObj.getBlockId(lightpos.i, lightpos.j, lightpos.k)==0)
                     {
-                    worldObj.setBlock(lightpos.i, lightpos.j, lightpos.k, DLMain.lightsourceinvis.blockID);
+                    worldObj.setBlock(lightpos.i, lightpos.j, lightpos.k, DLMain.lightsourceinvis.blockID,0 ,2);
                     worldObj.scheduleBlockUpdate(lightpos.i, lightpos.j, lightpos.k, DLMain.lightsourceinvis.blockID, DLLightSource.lightSourceTickRate);
                     }
                 }
@@ -405,6 +405,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
     
     public boolean isDynamicLightSource(int itemID)
     {
+//    	Block.blocksList[itemID].lightValue>0 TODO
     	if(itemID==FCBetterThanWolves.fcBlockTorchNetherBurning.blockID || itemID==FCBetterThanWolves.fcBlockTorchFiniteBurning.blockID)
     	{
     		return true;

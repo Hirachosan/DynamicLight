@@ -75,20 +75,19 @@ public class DLLightSource extends Block
 
 	@Override
   public void updateTick( World world, int i, int j, int k, Random random )
-  {
-      boolean canStay = isPlayerInBoundsWithTorch( world, i, j, k );
+	{
+		boolean canStay = isPlayerInBoundsWithTorch( world, i, j, k );
 
-      if ( !canStay )
-      {
-      		world.setBlockToAir(i, j, k);
-      }
-      else if( !world.IsUpdatePendingThisTickForBlock( i, j, k, world.getBlockId( i, j, k ) ))
-      {
+		if ( !canStay )
+		{
+			world.setBlock( i, j, k, 0, 0, 2 );  
+		}
+
+		else if( !world.IsUpdatePendingThisTickForBlock( i, j, k, world.getBlockId( i, j, k ) ))
+		{
 			world.scheduleBlockUpdate( i, j, k, world.getBlockId( i, j, k ), lightSourceTickRate );
-      }
-
-
-  }
+		}
+	}
 	
 	@Override
 	public boolean RenderBlock(RenderBlocks var1, int var2, int var3, int var4) {
@@ -109,7 +108,7 @@ public class DLLightSource extends Block
 
     		if( !world.IsUpdatePendingThisTickForBlock( i, j, k, blockID ) )
     		{
-    			world.scheduleBlockUpdate( i, j, k, blockID, 1 );
+    			world.scheduleBlockUpdate( i, j, k, blockID, lightSourceTickRate );
     		}
     }
     
