@@ -31,7 +31,7 @@ public class FCBlockTorchBase extends Block
 	{
 		return null;
 	}
-
+	
 	@Override
     public boolean isOpaqueCube()
     {
